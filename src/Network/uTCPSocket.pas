@@ -8,20 +8,30 @@ uses SysUtils, Sockets, uLogger;
 
 type
   TTCPSocket = class
+
   private
+
+    FSocket: Integer;
+    FConnected: Boolean;
+
+  public
     constructor Create;
     destructor Destroy; override;
     function Connect(const IP: String; Port: Word): Boolean;
     function Send(const Data: String): Integer;
     function Receive(var Buffer: String; MaxLen: Integer): Integer;
-    procedure Connected: Boolean read FConnected;
+    property Connected: Boolean read FConnected;
+    procedure Close;
+
+
+
   end;
 
 implementation
 
 constructor TTCPSocket.Create;
 begin
-  FSocket := -1;
+  FSocket := -1 ;
   FConnected := False;
 end;
 
@@ -33,15 +43,13 @@ end;
 
 function TTCPSocket.Connect(const IP: String; Port: Word): Boolean;
 var
-  Addr: TInetSockAdr;
+  Addr: TInetSockAddr;
   begin
     if FSocket = -1 then Exit(False);
-
     Addr.sin_family :=AF_INET;
     Addr.sin_port := htons(Port);
     Addr.sin_addr := StrToNetAddr(IP);
-
-    FConnected :=fpConnect (FSocket, @Addr, Sizeof(Addr)) = 0
+    FConnected :=fpConnect (FSocket, @Addr, Sizeof(Addr)) = 0;
     Result := FConnected;
   end;
 
@@ -49,7 +57,7 @@ var
   var TempBuff: array of  Byte;
   begin
     SetLength(TempBuff, MaxLen);
-    Result := fcRecv(FSocket, @TempBuff[0], MaxLen, 0);
+    Result := fpRecv(FSocket, @TempBuff[0], MaxLen, 0);
     if Result > 0 then
       begin
         SetString(Buffer,PChar(@TempBuff[0]), Result);
@@ -58,10 +66,10 @@ var
       Buffer := '';
   end;
 
-  function TTCPSocket.Send(const Data: String) Integer;
+  function TTCPSocket.Send(const Data: String): Integer;
   begin
-    if not FConnected then Exit(-1):
-      Result := fpSend(FSocket, PChar(Data), Lenght(Data), 0);
+    if not FConnected then Exit(-1);
+      Result := fpSend(FSocket, PChar(Data), Length(Data), 0);
     end;
   procedure TTCPSocket.Close;
   begin

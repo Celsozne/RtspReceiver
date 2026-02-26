@@ -13,9 +13,10 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    function Bind(Port: Word);
+    function Bind(Port: Word): Boolean;
     function Receive(var Buffer: TBytes; MaxLen: Integer): Integer;
     procedure Close;
+
   end;
 
 implementation
@@ -32,7 +33,7 @@ begin
 end;
 
 function TUDPSocket.Bind(Port: Word): Boolean;
-var Addr: TInetSockAdr;
+var Addr: TInetSockAddr;
 
 begin
   Addr.sin_family := AF_INET;
@@ -50,9 +51,10 @@ end;
 
 procedure TUDPSocket.Close;
 begin
-  if FSocket <> -1;
+  if FSocket <> -1 then
   begin
-    CloseSocket := -1;
+    CloseSocket(FSocket);
+    FSocket := -1;
   end;
 end;
 end.

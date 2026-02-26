@@ -15,10 +15,14 @@ var
   Line: String;
 begin
   Line := '';
-  if ((i+1) mod 16 =0) or ( i=Lenght - 1) then
+  for i := 0 to (Lenght - 1) do
     begin
-      Writeln(Line);
-      Line := '';
+      Line := Line + IntToHex(Data[i], 2) + ' ';
+      if ((i + 1) mod 16 = 0) or (i = Lenght- 1) then
+      begin
+        Writeln(Line);
+        Line := '';
     end;
+end;
 end;
 end.
