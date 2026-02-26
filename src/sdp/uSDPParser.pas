@@ -18,7 +18,7 @@ implementation
 
 function ParseSDP(const SDPBody: String): TSDPInfo;
   var
-  Lines: TArray<String>;
+  Lines:TStringArray;
   Line: String;
 
   begin
