@@ -8,7 +8,7 @@ procedure RunSocketTest;
 
 implementation
 
-use uTCPSocket, uLogger;
+uses uTCPSocket, uLogger;
 
 procedure RunSocketTest;
 var Sock: RunSocketTest;
@@ -20,7 +20,7 @@ Log(llInfo, 'Running TCP Socket Test');
 Sock := TTCPSocket.Create;
 
 try
-  if Socket.Connect('8.8.8.8', 53) then Log(llInfo, 'Connected Successfully');]
+  if Socket.Connect('8.8.8.8', 53) then Log(llInfo, 'Connected Successfully');
   else Log(llError, 'Connection Failed.');
 finally Sock.Free;
 end;

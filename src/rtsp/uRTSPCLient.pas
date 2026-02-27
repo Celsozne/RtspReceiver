@@ -34,7 +34,7 @@ end;
 destructor TRTSPClient.Destroy;
   begin
   FTCP.Free;
-  inheried;
+  inherited;
   end;
 
   function TRTSPClient.Connect(const IP, URL: String; Port: Word): Boolean;
@@ -56,7 +56,7 @@ destructor TRTSPClient.Destroy;
 
         if Resp.StatusCode = 200 then
           begin
-            SDO := ParseSDP(Resp.Body);
+            SDP := ParseSDP(Resp.Body);
             Inc(FCSeq);
             Exit(True)
           end;
@@ -76,7 +76,7 @@ destructor TRTSPClient.Destroy;
 
     if Resp.StatusCode = 200 then
       begin
-        FSession := Respo.Session;
+        FSession := Resp.Session;
         Inc(FCSeq);
         Exit(True);
       end;
@@ -92,6 +92,6 @@ destructor TRTSPClient.Destroy;
     FTCP.Send(Req);
     FTCP.Receive(RespStr, 4096);
     Resp := ParseRTSPResponse(RespStr);
-    Resul := Resp.StatusCode = 200
+    Result := Resp.StatusCode = 200
   end;
   end.

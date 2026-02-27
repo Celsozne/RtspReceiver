@@ -13,7 +13,7 @@ type
   PAVDictionary = Pointer;
 
 function av_frame_alloc: PAVFrame; cdecl; external 'avutil';
-procedure av_free_frame(var frame: PAVFrame); cdecl; external 'avutil';
+procedure av_frame_free(var frame: PAVFrame); cdecl; external 'avutil';
 
 implementation
 

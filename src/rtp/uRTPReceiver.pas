@@ -4,7 +4,7 @@ unit uRTPReceiver;
 
 interface
 
-uses SysUtils, uUDPSocket, uRTPPacket;
+uses SysUtils, uUDPSocket, uRTPPacket, uLogger;
 
 type
 
@@ -14,34 +14,34 @@ type
     FPort: Word;
 
   public
-    constructor Create(Port:Word);
-    destructor Destroy; override;
-    function ReceivePacket(var Packet: TRTPPacket); Boolean;
+    constructor Create(Port: Word);
+    destructor Destroy;
+    function ReceivePacket(var Packet: TRTPPacket): Boolean;
   end;
 
 implementation
 
-constructor Create(Port: Word);
+constructor TRTPReceiver.Create(Port: Word);
 begin
   FPort := Port;
   FSocket := TUDPSocket.Create;
 
   if not FSocket.Bind(Port) then
-    Log(llError, 'Failed to bind RTP Port' + IntToStr(Port));
+    Log(llError, 'Failed to bind RTP Port ' + IntToStr(Port));
 end;
 
-destructor uRTPReceiver.Destroy;
+destructor TRTPReceiver.Destroy;
 begin
   FSocket.Free;
   inherited;
   end;
 
-  function ReceivePacket(var Packet: TRTPPacket): Boolean;
+  function TRTPReceiver.ReceivePacket(var Packet: TRTPPacket): Boolean;
   var
   Buffer: TBytes;
   BytesRead: Integer;
   begin
-    Result := False
+    Result := False;
     BytesRead := FSocket.Receive(Buffer, 2048);
 
     if BytesRead > 0 then
